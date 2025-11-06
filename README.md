@@ -19,11 +19,11 @@
 
 ### HomiQuest is a full-stack rental platform that enables users to rent, host, and explore properties seamlessly. It simplifies the process of property discovery and hosting by providing an interactive and secure experience. Users can create listings for their homes, properties and can also explore existing listings with integrated map locations, reviews, and ratings. The project follows the MVC (Model-View-Controller) design pattern, ensuring a modular, maintainable, and scalable architecture. With MongoDB Atlas as the cloud database, Cloudinary as the cloud storage (for storing Media files) and RESTful APIs connecting the backend and frontend, HomiQuest ensures efficient data handling and smooth user interaction.
 
-<h3><i>
+<h4><i>
   HomiQuest = Homi + Quest <br>
   Homi = means Home, derived from "Home", <br>
   Quest = meaning a search, journey, or mission to achieve something meaningful or valuable.
-</i></h3>
+</i></h4>
 
 <h2><a href="https://homiquest.onrender.com">🌐 HomiQuest Live Link: https://homiquest.onrender.com</a></h2>
 
@@ -119,14 +119,14 @@
 
 To get started with HomeQuest, follow the steps below:
 
-<h2>1. Clone the Repository</h2>
+<h3>1. Clone the Repository</h3>
 <p>Clone this repository to your local machine.</p>
 
 ```
 git clone https://github.com/OmkarArdekar12/HomiQuest.git
 ```
 
-<h2>2. Install Dependencies</h2>
+<h3>2. Install Dependencies</h3>
 
 ```
 npm install
@@ -138,7 +138,7 @@ npm install
 npm i
 ```
 
-<h2>3. Setup Environment variables</h2>
+<h3>3. Setup Environment variables</h3>
 
 ```
 ATLASDB_URL=your_mongodb_atlas_connection_url
@@ -150,7 +150,7 @@ MAP_TOKEN=your_mapbox_access_token
 SECRET=your_secret_key
 ```
 
-<h2>3. To Run HomiQuest Application</h2>
+<h3>4. To Run HomiQuest Application</h3>
 
 ```
 node app.js
