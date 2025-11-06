@@ -56,7 +56,7 @@
 
 ## Technologies
 
-<h3>
+<h4>
 <table border="1">
   <thead>
     <tr>
@@ -113,20 +113,21 @@
     </tr>
   </tbody>
 </table>
-</h3>
+</h4>
 
 ## Installation
 
 To get started with HomeQuest, follow the steps below:
 
-<h3>1. Clone the Repository</h3>
+#### 1. Clone the Repository
+
 <p>Clone this repository to your local machine.</p>
 
 ```
 git clone https://github.com/OmkarArdekar12/HomiQuest.git
 ```
 
-<h3>2. Install Dependencies</h3>
+#### 2. Install Dependencies
 
 ```
 npm install
@@ -138,7 +139,7 @@ npm install
 npm i
 ```
 
-<h3>3. Setup Environment variables</h3>
+#### 3. Setup Environment Variables
 
 ```
 ATLASDB_URL=your_mongodb_atlas_connection_url
@@ -150,7 +151,7 @@ MAP_TOKEN=your_mapbox_access_token
 SECRET=your_secret_key
 ```
 
-<h3>4. To Run HomiQuest Application</h3>
+#### 4. To Run HomiQuest Application
 
 ```
 node app.js
