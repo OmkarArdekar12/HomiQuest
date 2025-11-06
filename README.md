@@ -15,9 +15,9 @@
 <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"/>
 </div> <br>
 
-# HomiQuest – Rent, Host, Explore
+## HomiQuest – Rent, Host, Explore
 
-## HomiQuest is a full-stack rental platform that enables users to rent, host, and explore properties seamlessly. It simplifies the process of property discovery and hosting by providing an interactive and secure experience. Users can create listings for their homes, properties and can also explore existing listings with integrated map locations, reviews, and ratings. The project follows the MVC (Model-View-Controller) design pattern, ensuring a modular, maintainable, and scalable architecture. With MongoDB Atlas as the cloud database, Cloudinary as the cloud storage (for storing Media files) and RESTful APIs connecting the backend and frontend, HomiQuest ensures efficient data handling and smooth user interaction.
+### HomiQuest is a full-stack rental platform that enables users to rent, host, and explore properties seamlessly. It simplifies the process of property discovery and hosting by providing an interactive and secure experience. Users can create listings for their homes, properties and can also explore existing listings with integrated map locations, reviews, and ratings. The project follows the MVC (Model-View-Controller) design pattern, ensuring a modular, maintainable, and scalable architecture. With MongoDB Atlas as the cloud database, Cloudinary as the cloud storage (for storing Media files) and RESTful APIs connecting the backend and frontend, HomiQuest ensures efficient data handling and smooth user interaction.
 
 <h3><i>
   HomiQuest = Homi + Quest <br>
@@ -164,5 +164,10 @@ nodemon app.js
 
 <br>
 <hr>
+
+<!-- HomiQuest – Rent, Host, Explore
+HomiQuest is an all-in-one full-stack rental platform designed to make property renting, hosting, and exploring effortless. It bridges the gap between renters and property owners through a seamless and secure experience. With intuitive search filters, interactive maps, detailed listings, and a built-in review and rating system, HomiQuest ensures transparency and convenience for every user. Whether you’re looking to find your next home or list your property, HomiQuest simplifies the entire process—from discovery to booking. -->
+
+<!-- HomiQuest – Rent, Host, Explore. HomiQuest is a full-stack rental platform that connects renters and property owners through a seamless, secure experience. It simplifies property discovery, hosting, and management with interactive maps, search functionality, smart search filters, detailed listings, and a built-in reviews and ratings system. -->
 
 <!-- HomiQuest is an all-in-one platform that allows users to rent, host, and explore a variety of properties and houses. Whether you're looking for a rental property, wanting to host your property for others, or exploring homes in different areas, HomiQuest simplifies the process. With features like property listing, search, filter search, maps and reviews, etc, HomiQuest provides a seamless experience for both renters and hosts. -->
