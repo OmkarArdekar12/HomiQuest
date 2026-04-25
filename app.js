@@ -22,9 +22,6 @@ const userRouter = require("./routes/user.js");
 const filterSearchRouter = require("./routes/filterSearch.js");
 const bookingRouter = require("./routes/booking.js");
 
-const dns = require("dns");
-dns.setServers(["1.1.1.1", "8.8.8.8"]);
-
 const dbUrl = process.env.ATLASDB_URL;
 
 async function main() {
