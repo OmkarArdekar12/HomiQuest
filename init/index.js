@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const initData = require("./data.js");
 const Listing = require("../models/listing.js");
 
-const MONGO_URL = //MONGODB_URL;
+const MONGO_URL = //MONGODBATLAS_URL or MONGODB_URI;
   main()
     .then(() => {
       console.log("connected to DB");
