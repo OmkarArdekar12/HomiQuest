@@ -20,6 +20,10 @@ const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 const filterSearchRouter = require("./routes/filterSearch.js");
+const bookingRouter = require("./routes/booking.js");
+
+const dns = require("dns");
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 const dbUrl = process.env.ATLASDB_URL;
 
@@ -91,6 +95,7 @@ app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
 app.use("/listings/search", filterSearchRouter);
+app.use("/bookings", bookingRouter);
 
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
