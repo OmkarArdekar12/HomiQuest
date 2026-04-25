@@ -137,7 +137,7 @@ module.exports.processPayment = async (req, res) => {
 
   req.flash(
     "success",
-    `Payment successful! Booking confirmed for ${booking.totalNights} night${booking.totalNights > 1 ? "s" : ""} — ₹${booking.totalPrice.toLocaleString("en-IN")}`,
+    `Payment successful! Booking confirmed for ${booking.totalNights} night${booking.totalNights > 1 ? "s" : ""} at ₹${booking.totalPrice.toLocaleString("en-IN")}`,
   );
   res.redirect(`/bookings/confirmation/${booking._id}`);
 };
