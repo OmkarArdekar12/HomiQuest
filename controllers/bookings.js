@@ -42,7 +42,6 @@ module.exports.showCheckout = async (req, res) => {
   //   checkIn: { $lt: coDate },
   //   checkOut: { $gt: ciDate },
   // });
-
   // if (conflict) {
   //   req.flash(
   //     "error",
