@@ -1249,63 +1249,6 @@ const sampleListings = [
     },
     category: "Mountains",
   },
-  {
-    title: "Underground Cave House",
-    description:
-      "A unique cave house with a modern interior and natural rock walls.",
-    image: {
-      url: "https://example.com/image54.jpg",
-      filename: "image54",
-    },
-    price: 180,
-    location: "Cappadocia, Turkey",
-    country: "Turkey",
-    reviews: [],
-    owner: "660d2b3e9d12f4a1b8e4a654",
-    geometry: {
-      type: "Point",
-      coordinates: [34.8493, 38.64],
-    },
-    category: "Trending",
-  },
-  {
-    title: "Ski Chalet with Hot Tub",
-    description:
-      "A luxurious ski-in/ski-out chalet with a private hot tub and fireplace.",
-    image: {
-      url: "https://example.com/image55.jpg",
-      filename: "image55",
-    },
-    price: 500,
-    location: "Zermatt, Switzerland",
-    country: "Switzerland",
-    reviews: [],
-    owner: "660d2b3e9d12f4a1b8e4a655",
-    geometry: {
-      type: "Point",
-      coordinates: [7.7491, 46.0207],
-    },
-    category: "Mountains",
-  },
-  {
-    title: "Desert Oasis Camp",
-    description:
-      "A luxurious glamping experience under the stars in the Sahara Desert.",
-    image: {
-      url: "https://example.com/image75.jpg",
-      filename: "image75",
-    },
-    price: 320,
-    location: "Merzouga, Morocco",
-    country: "Morocco",
-    reviews: [],
-    owner: "660d2b3e9d12f4a1b8e4a675",
-    geometry: {
-      type: "Point",
-      coordinates: [-4.0121, 31.0802],
-    },
-    category: "Camping",
-  },
 ];
 
 console.log(sampleListings.length);
