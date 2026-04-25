@@ -35,19 +35,41 @@ module.exports.showCheckout = async (req, res) => {
     return res.redirect(`/listings/${listingId}`);
   }
 
+  // const conflict = await Booking.findOne({
+  //   listing: listingId,
+  //   user: req.user._id,
+  //   paymentStatus: "paid",
+  //   checkIn: { $lt: coDate },
+  //   checkOut: { $gt: ciDate },
+  // });
+
+  // if (conflict) {
+  //   req.flash(
+  //     "error",
+  //     "You already have a booking for this property on those dates.",
+  //   );
+  //   return res.redirect(`/listings/${listingId}`);
+  // }
+
   const conflict = await Booking.findOne({
     listing: listingId,
-    user: req.user._id,
     paymentStatus: "paid",
     checkIn: { $lt: coDate },
     checkOut: { $gt: ciDate },
   });
 
   if (conflict) {
-    req.flash(
-      "error",
-      "You already have a booking for this property on those dates.",
-    );
+    if (conflict.user.equals(req.user._id)) {
+      req.flash(
+        "error",
+        "You already have a booking for this property on these dates.",
+      );
+    } else {
+      req.flash(
+        "error",
+        "This property is already booked for the selected dates.",
+      );
+    }
     return res.redirect(`/listings/${listingId}`);
   }
 

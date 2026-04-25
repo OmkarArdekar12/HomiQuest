@@ -13,7 +13,7 @@
   </h4>
   <div class="row g-4">
     <div class="col-12 col-md-5 order-md-2">
-      <div class="order-card p-3 p-md-4 sticky-top" style="top:80px;">
+      <div class="order-card p-3 p-md-4" style="top:80px;">
         <img
           src="<%= listing.image.url %>"
           alt="listing"
@@ -43,27 +43,25 @@
 
         <div class="d-flex justify-content-between mb-1" style="font-size:.9rem;">
           <span class="text-muted">
-            ₹<%= listing.price.toLocaleString("en-IN") %> × <%= totalNights %> night<%= totalNights > 1 ? "s" : "" %>
+            &#8377;<%= listing.price.toLocaleString("en-IN") %> &times; <%= totalNights %> night<%= totalNights > 1 ? "s" : "" %>
           </span>
-          <span>₹<%= totalPrice.toLocaleString("en-IN") %></span>
+          <span>&#8377;<%= totalPrice.toLocaleString("en-IN") %></span>
         </div>
         <div class="d-flex justify-content-between mb-1" style="font-size:.9rem;">
           <span class="text-muted">Service fee</span>
-          <span>₹0</span>
+          <span>&#8377;0</span>
         </div>
 
         <hr />
 
         <div class="d-flex justify-content-between fw-bold">
           <span>Total (INR)</span>
-          <span style="font-size:1.1rem;">₹<%= totalPrice.toLocaleString("en-IN") %></span>
+          <span style="font-size:1.1rem;">&#8377;<%= totalPrice.toLocaleString("en-IN") %></span>
         </div>
-
-        <div class="mt-3 p-2 rounded" style="background:#f0fff4; border:1px solid #b2dfdb; font-size:.8rem;">
+        <div class="mt-3 p-2 rounded overflow-hidden" style="background:#f0fff4; border:1px solid #b2dfdb; font-size:.8rem;">
           <i class="fa-solid fa-shield-halved me-1" style="color:#2e7d32;"></i>
           <strong>Order ID:</strong> <%= orderId %>
         </div>
-
       </div>
     </div>
 
@@ -88,7 +86,7 @@
           </button>
         </div>
 
-        <form id="paymentForm" method="POST" action="/bookings/process-payment">
+        <form id="paymentForm" method="POST" action="/bookings/process-payment" novalidate class="needs-validation">
           <input type="hidden" name="orderId"       value="<%= orderId %>" />
           <input type="hidden" name="paymentMethod" id="paymentMethodInput" value="card" />
           <input type="hidden" name="simulateFailure" id="simulateFailure" value="false" />
@@ -100,60 +98,62 @@
                 <input
                   type="text"
                   id="cardNumber"
+                  name="cardNumber"
                   class="form-control"
                   placeholder="1234  5678  9012  3456"
                   maxlength="19"
+                  required
                 />
-                <span class="card-type-icon" id="cardTypeIcon">💳</span>
+                <span class="card-type-icon" id="cardTypeIcon"><i class="fa-solid fa-credit-card"></i></span>
               </div>
             </div>
             <div class="mb-3">
               <label class="form-label fw-semibold" style="font-size:.85rem;">Cardholder Name</label>
-              <input type="text" id="cardName" class="form-control" placeholder="Name on card" />
+              <input type="text" id="cardName" name="cardName" class="form-control" placeholder="Name on card" required  />
             </div>
             <div class="card-input-row mb-3">
               <div class="flex-fill">
                 <label class="form-label fw-semibold" style="font-size:.85rem;">Expiry</label>
-                <input type="text" id="cardExpiry" class="form-control" placeholder="MM / YY" maxlength="7" />
+                <input type="text" id="cardExpiry" name="cardExpiry" class="form-control" placeholder="MM / YY" maxlength="7" required />
               </div>
               <div style="width:130px;">
                 <label class="form-label fw-semibold" style="font-size:.85rem;">CVV</label>
-                <input type="password" id="cardCvv" class="form-control" placeholder="•••" maxlength="3" />
+                <input type="password" id="cardCvv" name="cardCvv" class="form-control" placeholder="•••" maxlength="3" required />
               </div>
             </div>
             <div class="alert alert-info py-2 px-3 mb-3" style="font-size:.82rem; border-radius:8px;">
               <i class="fa-solid fa-circle-info me-1"></i>
-              <strong>Test card:</strong> 4111 1111 1111 1111 &nbsp;|&nbsp; Any future expiry &nbsp;|&nbsp; Any CVV
+              <strong>Card:</strong> 1111 1111 1111 1111 &nbsp;|&nbsp; Any future expiry &nbsp;|&nbsp; Any CVV
             </div>
           </div>
 
           <div id="panel-upi" style="display:none;">
             <div class="mb-3">
               <label class="form-label fw-semibold" style="font-size:.85rem;">UPI ID</label>
-              <input type="text" id="upiId" class="form-control" placeholder="yourname@upi" />
+              <input type="text" id="upiId" name="upiId" class="form-control" placeholder="yourname@upi" required />
             </div>
             <div class="alert alert-info py-2 px-3 mb-3" style="font-size:.82rem; border-radius:8px;">
               <i class="fa-solid fa-circle-info me-1"></i>
-              <strong>Test UPI:</strong> test@upi &nbsp;(any ID works in simulation)
+              <strong>UPI:</strong> user@upi &nbsp;(any ID works in simulation)
             </div>
           </div>
 
           <div id="panel-netbanking" style="display:none;">
             <div class="mb-3">
               <label class="form-label fw-semibold" style="font-size:.85rem;">Select Bank</label>
-              <select class="form-select">
+              <select class="form-select" id="bankSelect" name="bank" required>
                 <option value="" disabled selected>Choose your bank</option>
                 <option>State Bank of India</option>
                 <option>HDFC Bank</option>
                 <option>ICICI Bank</option>
                 <option>Axis Bank</option>
                 <option>Kotak Mahindra Bank</option>
-                <option>Punjab National Bank</option>
+                <option>HomiQuest Bank</option>
               </select>
             </div>
             <div class="alert alert-info py-2 px-3 mb-3" style="font-size:.82rem; border-radius:8px;">
               <i class="fa-solid fa-circle-info me-1"></i>
-              Any bank selection works in simulation mode.
+              Any bank selection works in payment simulation mode.
             </div>
           </div>
 
@@ -161,16 +161,20 @@
             <div class="mb-3">
               <label class="form-label fw-semibold" style="font-size:.85rem;">Select Wallet</label>
               <div class="d-flex gap-2 flex-wrap">
-                <% ["Paytm", "PhonePe", "Amazon Pay", "Mobikwik"].forEach(w => { %>
+                <% ["Google Pay", "Paytm", "PhonePe"].forEach(w => { %>
                 <button type="button"
                   class="btn btn-outline-secondary btn-sm wallet-btn"
                   data-wallet="<%= w %>"><%= w %></button>
                 <% }) %>
               </div>
+              <input type="hidden" id="walletInput" name="wallet" />
+              <div id="walletError" class="text-danger small d-none">
+                Please select a wallet
+              </div>
             </div>
             <div class="alert alert-info py-2 px-3 mb-3" style="font-size:.82rem; border-radius:8px;">
               <i class="fa-solid fa-circle-info me-1"></i>
-              Any wallet selection works in simulation mode.
+              Any wallet selection works in payment simulation mode.
             </div>
           </div>
           
@@ -180,21 +184,21 @@
             class="btn btn-dark w-100 py-2 mt-1 fw-semibold"
             style="font-size:1rem; letter-spacing:.03em;"
           >
-            <i class="fa-solid fa-lock me-2"></i>Pay ₹<%= totalPrice.toLocaleString("en-IN") %>
+            <i class="fa-solid fa-lock me-2"></i>Pay &#8377;<%= totalPrice.toLocaleString("en-IN") %>
           </button>
 
           <div class="form-check mt-3">
             <input class="form-check-input" type="checkbox" id="failureCheck" />
             <label class="form-check-label text-muted" for="failureCheck" style="font-size:.82rem;">
-              Simulate payment failure (for demo)
+              Simulate payment failure
             </label>
           </div>
 
           <div class="security-row mt-3">
-            <i class="fa-solid fa-lock"></i> 256-bit SSL Encrypted
-            &nbsp;|&nbsp;
-            <i class="fa-solid fa-shield-halved"></i> PCI DSS Compliant
-            &nbsp;|&nbsp;
+            <i class="fa-solid fa-lock"></i> No real payment will be processed
+            &nbsp;&nbsp;
+            <i class="fa-solid fa-shield-halved"></i> Payment Gate Simulation
+            &nbsp;&nbsp;
             <i class="fa-solid fa-rotate-left"></i> Secure Checkout
           </div>
 
@@ -223,15 +227,22 @@
     });
   });
 
+  const icon = document.getElementById("cardTypeIcon");
   document.getElementById("cardNumber").addEventListener("input", function () {
     let val = this.value.replace(/\D/g, "").substring(0, 16);
     this.value = val.replace(/(.{4})/g, "$1 ").trim();
 
-    const icon = document.getElementById("cardTypeIcon");
-    if      (/^4/.test(val))  icon.textContent = "💳";
-    else if (/^5[1-5]/.test(val)) icon.textContent = "💳";
-    else if (/^6/.test(val))  icon.textContent = "💳";
-    else                      icon.textContent = "💳";
+    if (/^4/.test(val)) {
+      icon.innerHTML = '<i class="fa-brands fa-cc-visa"></i>';
+    } else if (/^5[1-5]/.test(val)) {
+      icon.innerHTML = '<i class="fa-brands fa-cc-mastercard"></i>';
+    } else if (/^3[47]/.test(val)) {
+      icon.innerHTML = '<i class="fa-brands fa-cc-amex"></i>';
+    } else if (/^6/.test(val)) {
+      icon.innerHTML = '<i class="fa-brands fa-cc-discover"></i>';
+    } else {
+      icon.innerHTML = '<i class="fa-solid fa-credit-card"></i>';
+    }
   });
 
   document.getElementById("cardExpiry").addEventListener("input", function () {
@@ -248,10 +259,66 @@
     btn.addEventListener("click", () => {
       document.querySelectorAll(".wallet-btn").forEach(b => b.classList.remove("btn-dark"));
       btn.classList.add("btn-dark");
+      document.getElementById("walletInput").value = btn.dataset.wallet;
     });
   });
 
   document.getElementById("payNowBtn").addEventListener("click", function () {
+    const form = document.getElementById("paymentForm");
+    const method = document.getElementById("paymentMethodInput").value;
+
+    form.classList.remove("was-validated");
+
+    let valid = true;
+
+    if (method === "card") {
+      const cardNumber = document.getElementById("cardNumber");
+      const cardName = document.getElementById("cardName");
+      const cardExpiry = document.getElementById("cardExpiry");
+      const cardCvv = document.getElementById("cardCvv");
+
+      if (cardNumber.value.replace(/\s/g, "").length !== 16) valid = false;
+      if (!cardName.value.trim()) valid = false;
+      if (!/^\d{2} \/ \d{2}$/.test(cardExpiry.value.trim())) valid = false;
+      if (cardCvv.value.trim().length !== 3) valid = false;
+
+      cardNumber.setCustomValidity(cardNumber.value.replace(/\s/g, "").length === 16 ? "" : "invalid");
+      cardName.setCustomValidity(cardName.value.trim() ? "" : "invalid");
+      cardExpiry.setCustomValidity(/^\d{2} \/ \d{2}$/.test(cardExpiry.value.trim()) ? "" : "invalid");
+      cardCvv.setCustomValidity(cardCvv.value.trim().length === 3 ? "" : "invalid");
+    }
+
+    if (method === "upi") {
+      const upiId = document.getElementById("upiId");
+      const ok = /^[\w.-]+@[\w.-]+$/.test(upiId.value.trim());
+      valid = valid && ok;
+      upiId.setCustomValidity(ok ? "" : "invalid");
+    }
+
+    if (method === "netbanking") {
+      const bank = document.getElementById("bankSelect");
+      const ok = !!bank.value;
+      valid = valid && ok;
+      bank.setCustomValidity(ok ? "" : "invalid");
+    }
+
+    if (method === "wallet") {
+      const wallet = document.getElementById("walletInput");
+      const error = document.getElementById("walletError");
+
+      if (!wallet.value) {
+        valid = false;
+        error.classList.remove("d-none");
+      } else {
+        error.classList.add("d-none");
+      }
+    }
+
+    form.classList.add("was-validated");
+    if (!valid) {
+      return;
+    }
+
     const overlay = document.getElementById("processingOverlay");
     const spinner = document.getElementById("spinnerEl");
     const tick = document.getElementById("tickEl");
