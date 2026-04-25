@@ -1,0 +1,98 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-5 mb-5">
+  <div
+    class="col-10 col-md-6 col-lg-5 offset-1 offset-md-3 offset-lg-3 text-center"
+  >
+    <div class="mb-3" style="font-size: 4rem; color: #2ecc71">&#10003;</div>
+    <h3 class="fw-bold mb-1">Booking Confirmed!</h3>
+    <p class="text-muted mb-4">
+      Your payment was successful. Have a great stay!
+    </p>
+
+    <div
+      class="card p-4 text-start shadow-sm"
+      style="border-radius: 14px; border: none"
+    >
+      <img
+        src="<%= booking.listing.image.url %>"
+        class="w-100 mb-3"
+        style="border-radius: 10px; height: 170px; object-fit: cover"
+        alt="listing"
+      />
+
+      <h5 class="fw-bold mb-1"><%= booking.listing.title %></h5>
+      <p class="text-muted mb-3" style="font-size: 0.88rem">
+        <i class="fa-solid fa-location-dot me-1"></i>
+        <%= booking.listing.location %>, <%= booking.listing.country %>
+      </p>
+
+      <div
+        class="d-flex justify-content-between mb-1"
+        style="font-size: 0.92rem"
+      >
+        <span class="text-muted">Check-in</span>
+        <span class="fw-semibold"
+          ><%= new Date(booking.checkIn).toDateString() %></span
+        >
+      </div>
+      <div
+        class="d-flex justify-content-between mb-1"
+        style="font-size: 0.92rem"
+      >
+        <span class="text-muted">Check-out</span>
+        <span class="fw-semibold"
+          ><%= new Date(booking.checkOut).toDateString() %></span
+        >
+      </div>
+      <div
+        class="d-flex justify-content-between mb-1"
+        style="font-size: 0.92rem"
+      >
+        <span class="text-muted">Nights</span>
+        <span class="fw-semibold"><%= booking.totalNights %></span>
+      </div>
+      <div
+        class="d-flex justify-content-between mb-1"
+        style="font-size: 0.92rem"
+      >
+        <span class="text-muted">Amount Paid</span>
+        <span class="fw-bold" style="font-size: 1rem"
+          >&#8377;<%= booking.totalPrice.toLocaleString("en-IN") %></span
+        >
+      </div>
+
+      <hr />
+
+      <div
+        class="d-flex justify-content-between mb-1"
+        style="font-size: 0.82rem"
+      >
+        <span class="text-muted">Order ID</span>
+        <span class="text-secondary text-end overflow-hidden"
+          ><%= booking.orderId %></span
+        >
+      </div>
+      <div
+        class="d-flex justify-content-between mb-1"
+        style="font-size: 0.82rem"
+      >
+        <span class="text-muted">Transaction ID</span>
+        <span class="text-secondary text-end overflow-hidden"
+          ><%= booking.transactionId %></span
+        >
+      </div>
+      <div class="d-flex justify-content-between" style="font-size: 0.82rem">
+        <span class="text-muted">Payment Method</span>
+        <span class="badge bg-success text-capitalize"
+          ><%= booking.paymentMethod %></span
+        >
+      </div>
+    </div>
+
+    <div class="d-flex gap-3 mt-4 justify-content-center">
+      <a href="/bookings/my-bookings" class="btn btn-dark px-4">My Bookings</a>
+      <a href="/listings" class="btn btn-outline-dark px-4">Explore More</a>
+    </div>
+  </div>
+</div>

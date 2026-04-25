@@ -1,0 +1,298 @@
+<% layout("/layouts/boilerplate") %>
+
+<div id="processingOverlay">
+  <div class="spinner-ring" id="spinnerEl"></div>
+  <div class="success-tick" id="tickEl">&#10003;</div>
+  <p id="overlayMsg" class="text-white mt-3 fs-5 fw-semibold">Processing payment…</p>
+  <p id="overlaySubMsg" class="text-white-50 mt-1" style="font-size:.88rem;"></p>
+</div>
+
+<div class="checkout-wrap">
+  <h4 class="mb-4 fw-bold">
+    <i class="fa-solid fa-lock me-2" style="color:#212529;"></i>Secure Checkout
+  </h4>
+  <div class="row g-4">
+    <div class="col-12 col-md-5 order-md-2">
+      <div class="order-card p-3 p-md-4 sticky-top" style="top:80px;">
+        <img
+          src="<%= listing.image.url %>"
+          alt="listing"
+          class="w-100 mb-3"
+          style="border-radius:10px; height:160px; object-fit:cover;"
+        />
+        <h6 class="fw-bold mb-0"><%= listing.title %></h6>
+        <p class="text-muted mb-2" style="font-size:.85rem;">
+          <i class="fa-solid fa-location-dot me-1"></i>
+          <%= listing.location %>, <%= listing.country %>
+        </p>
+        <hr />
+        <div class="d-flex justify-content-between mb-1" style="font-size:.9rem;">
+          <span class="text-muted">Check-in</span>
+          <span class="fw-semibold"><%= new Date(checkIn).toDateString() %></span>
+        </div>
+        <div class="d-flex justify-content-between mb-1" style="font-size:.9rem;">
+          <span class="text-muted">Check-out</span>
+          <span class="fw-semibold"><%= new Date(checkOut).toDateString() %></span>
+        </div>
+        <div class="d-flex justify-content-between mb-1" style="font-size:.9rem;">
+          <span class="text-muted">Duration</span>
+          <span class="fw-semibold"><%= totalNights %> night<%= totalNights > 1 ? "s" : "" %></span>
+        </div>
+
+        <hr />
+
+        <div class="d-flex justify-content-between mb-1" style="font-size:.9rem;">
+          <span class="text-muted">
+            ₹<%= listing.price.toLocaleString("en-IN") %> × <%= totalNights %> night<%= totalNights > 1 ? "s" : "" %>
+          </span>
+          <span>₹<%= totalPrice.toLocaleString("en-IN") %></span>
+        </div>
+        <div class="d-flex justify-content-between mb-1" style="font-size:.9rem;">
+          <span class="text-muted">Service fee</span>
+          <span>₹0</span>
+        </div>
+
+        <hr />
+
+        <div class="d-flex justify-content-between fw-bold">
+          <span>Total (INR)</span>
+          <span style="font-size:1.1rem;">₹<%= totalPrice.toLocaleString("en-IN") %></span>
+        </div>
+
+        <div class="mt-3 p-2 rounded" style="background:#f0fff4; border:1px solid #b2dfdb; font-size:.8rem;">
+          <i class="fa-solid fa-shield-halved me-1" style="color:#2e7d32;"></i>
+          <strong>Order ID:</strong> <%= orderId %>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-12 col-md-7 order-md-1">
+      <div class="payment-card p-3 p-md-4">
+
+        <h6 class="fw-bold mb-3">Choose Payment Method</h6>
+
+        <div class="d-flex gap-2 mb-4 flex-wrap">
+          <button type="button" class="pay-tab active" data-method="card">
+            <i class="fa-regular fa-credit-card me-1"></i> Card
+          </button>
+          <button type="button" class="pay-tab" data-method="upi">
+            <img src="https://cdn.iconscout.com/icon/free/png-256/free-upi-logo-icon-download-in-svg-png-gif-file-formats--unified-payments-interface-payment-bank-brand-vol-3-pack-logos-icons-3030341.png"
+              height="18" class="me-1" alt="upi" /> UPI
+          </button>
+          <button type="button" class="pay-tab" data-method="netbanking">
+            <i class="fa-solid fa-building-columns me-1"></i> Net Banking
+          </button>
+          <button type="button" class="pay-tab" data-method="wallet">
+            <i class="fa-solid fa-wallet me-1"></i> Wallet
+          </button>
+        </div>
+
+        <form id="paymentForm" method="POST" action="/bookings/process-payment">
+          <input type="hidden" name="orderId"       value="<%= orderId %>" />
+          <input type="hidden" name="paymentMethod" id="paymentMethodInput" value="card" />
+          <input type="hidden" name="simulateFailure" id="simulateFailure" value="false" />
+
+          <div id="panel-card">
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Card Number</label>
+              <div class="card-num-wrap">
+                <input
+                  type="text"
+                  id="cardNumber"
+                  class="form-control"
+                  placeholder="1234  5678  9012  3456"
+                  maxlength="19"
+                />
+                <span class="card-type-icon" id="cardTypeIcon">💳</span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Cardholder Name</label>
+              <input type="text" id="cardName" class="form-control" placeholder="Name on card" />
+            </div>
+            <div class="card-input-row mb-3">
+              <div class="flex-fill">
+                <label class="form-label fw-semibold" style="font-size:.85rem;">Expiry</label>
+                <input type="text" id="cardExpiry" class="form-control" placeholder="MM / YY" maxlength="7" />
+              </div>
+              <div style="width:130px;">
+                <label class="form-label fw-semibold" style="font-size:.85rem;">CVV</label>
+                <input type="password" id="cardCvv" class="form-control" placeholder="•••" maxlength="3" />
+              </div>
+            </div>
+            <div class="alert alert-info py-2 px-3 mb-3" style="font-size:.82rem; border-radius:8px;">
+              <i class="fa-solid fa-circle-info me-1"></i>
+              <strong>Test card:</strong> 4111 1111 1111 1111 &nbsp;|&nbsp; Any future expiry &nbsp;|&nbsp; Any CVV
+            </div>
+          </div>
+
+          <div id="panel-upi" style="display:none;">
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">UPI ID</label>
+              <input type="text" id="upiId" class="form-control" placeholder="yourname@upi" />
+            </div>
+            <div class="alert alert-info py-2 px-3 mb-3" style="font-size:.82rem; border-radius:8px;">
+              <i class="fa-solid fa-circle-info me-1"></i>
+              <strong>Test UPI:</strong> test@upi &nbsp;(any ID works in simulation)
+            </div>
+          </div>
+
+          <div id="panel-netbanking" style="display:none;">
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Select Bank</label>
+              <select class="form-select">
+                <option value="" disabled selected>Choose your bank</option>
+                <option>State Bank of India</option>
+                <option>HDFC Bank</option>
+                <option>ICICI Bank</option>
+                <option>Axis Bank</option>
+                <option>Kotak Mahindra Bank</option>
+                <option>Punjab National Bank</option>
+              </select>
+            </div>
+            <div class="alert alert-info py-2 px-3 mb-3" style="font-size:.82rem; border-radius:8px;">
+              <i class="fa-solid fa-circle-info me-1"></i>
+              Any bank selection works in simulation mode.
+            </div>
+          </div>
+
+          <div id="panel-wallet" style="display:none;">
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:.85rem;">Select Wallet</label>
+              <div class="d-flex gap-2 flex-wrap">
+                <% ["Paytm", "PhonePe", "Amazon Pay", "Mobikwik"].forEach(w => { %>
+                <button type="button"
+                  class="btn btn-outline-secondary btn-sm wallet-btn"
+                  data-wallet="<%= w %>"><%= w %></button>
+                <% }) %>
+              </div>
+            </div>
+            <div class="alert alert-info py-2 px-3 mb-3" style="font-size:.82rem; border-radius:8px;">
+              <i class="fa-solid fa-circle-info me-1"></i>
+              Any wallet selection works in simulation mode.
+            </div>
+          </div>
+          
+          <button
+            type="button"
+            id="payNowBtn"
+            class="btn btn-dark w-100 py-2 mt-1 fw-semibold"
+            style="font-size:1rem; letter-spacing:.03em;"
+          >
+            <i class="fa-solid fa-lock me-2"></i>Pay ₹<%= totalPrice.toLocaleString("en-IN") %>
+          </button>
+
+          <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" id="failureCheck" />
+            <label class="form-check-label text-muted" for="failureCheck" style="font-size:.82rem;">
+              Simulate payment failure (for demo)
+            </label>
+          </div>
+
+          <div class="security-row mt-3">
+            <i class="fa-solid fa-lock"></i> 256-bit SSL Encrypted
+            &nbsp;|&nbsp;
+            <i class="fa-solid fa-shield-halved"></i> PCI DSS Compliant
+            &nbsp;|&nbsp;
+            <i class="fa-solid fa-rotate-left"></i> Secure Checkout
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll(".pay-tab");
+  const methodInput = document.getElementById("paymentMethodInput");
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      const method = tab.dataset.method;
+      methodInput.value = method;
+
+      ["card", "upi", "netbanking", "wallet"].forEach(p => {
+        document.getElementById("panel-" + p).style.display = p === method ? "block" : "none";
+      });
+    });
+  });
+
+  document.getElementById("cardNumber").addEventListener("input", function () {
+    let val = this.value.replace(/\D/g, "").substring(0, 16);
+    this.value = val.replace(/(.{4})/g, "$1 ").trim();
+
+    const icon = document.getElementById("cardTypeIcon");
+    if      (/^4/.test(val))  icon.textContent = "💳";
+    else if (/^5[1-5]/.test(val)) icon.textContent = "💳";
+    else if (/^6/.test(val))  icon.textContent = "💳";
+    else                      icon.textContent = "💳";
+  });
+
+  document.getElementById("cardExpiry").addEventListener("input", function () {
+    let val = this.value.replace(/\D/g, "").substring(0, 4);
+    if (val.length > 2) val = val.slice(0, 2) + " / " + val.slice(2);
+    this.value = val;
+  });
+
+  document.getElementById("failureCheck").addEventListener("change", function () {
+    document.getElementById("simulateFailure").value = this.checked ? "true" : "false";
+  });
+
+  document.querySelectorAll(".wallet-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".wallet-btn").forEach(b => b.classList.remove("btn-dark"));
+      btn.classList.add("btn-dark");
+    });
+  });
+
+  document.getElementById("payNowBtn").addEventListener("click", function () {
+    const overlay = document.getElementById("processingOverlay");
+    const spinner = document.getElementById("spinnerEl");
+    const tick = document.getElementById("tickEl");
+    const msg = document.getElementById("overlayMsg");
+    const subMsg = document.getElementById("overlaySubMsg");
+    const isFail = document.getElementById("simulateFailure").value === "true";
+
+    overlay.classList.add("show");
+
+    if (isFail) {
+      msg.textContent = "Processing payment…";
+      subMsg.textContent = "";
+      setTimeout(() => {
+        spinner.style.borderTopColor = "#e74c3c";
+        msg.textContent = "Payment declined";
+        subMsg.textContent = "Redirecting you back…";
+        setTimeout(() => document.getElementById("paymentForm").submit(), 1200);
+      }, 2000);
+    } else {
+      const steps = [
+        { msg: "Connecting to bank…", sub: "", delay: 1000 },
+        { msg: "Verifying card details…", sub: "Do not press back", delay: 1000 },
+        { msg: "Authenticating payment…", sub: "Checking with your bank", delay: 1000 },
+        { msg: "Payment successful!", sub: "Confirming your booking…", delay: 900 },
+      ];
+      let i = 0;
+      function runStep() {
+        if (i < steps.length) {
+          msg.textContent    = steps[i].msg;
+          subMsg.textContent = steps[i].sub;
+          i++;
+          setTimeout(runStep, steps[i - 1].delay);
+        } else {
+          spinner.style.display = "none";
+          tick.style.display = "block";
+          msg.textContent = "Booking confirmed! 🎉";
+          subMsg.textContent = "Saving your details…";
+          setTimeout(() => document.getElementById("paymentForm").submit(), 800);
+        }
+      }
+      runStep();
+    }
+  });
+</script>

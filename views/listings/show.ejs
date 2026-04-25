@@ -2,6 +2,87 @@
 <script>
   const mapToken = "<%= process.env.MAP_TOKEN %>";
   const listing = <%- JSON.stringify(listing) %>;
+  const pricePerNight = <%= listing.price %>;
+  const listingId = "<%= listing._id %>";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const checkInEl = document.getElementById("checkIn");
+    const checkOutEl = document.getElementById("checkOut");
+    const reserveBtn = document.getElementById("reserveBtn");
+    const breakdown = document.getElementById("priceBreakdown");
+    const priceCalcEl = document.getElementById("priceCalc");
+    const totalAmtEl = document.getElementById("totalAmt");
+    const grandTotalEl = document.getElementById("grandTotal");
+
+    if (!checkInEl || !checkOutEl || !reserveBtn) {
+      return;
+    }
+
+    const today = new Date().toISOString().split("T")[0];
+    checkInEl.min = today;
+    checkOutEl.min = today;
+
+    function disableReserve() {
+      reserveBtn.href = "#";
+      reserveBtn.style.pointerEvents = "none";
+      reserveBtn.style.opacity = ".55";
+      reserveBtn.style.cursor = "not-allowed";
+    }
+
+    function enableReserve(url) {
+      reserveBtn.href = url;
+      reserveBtn.style.pointerEvents = "auto";
+      reserveBtn.style.opacity = "1";
+      reserveBtn.style.cursor = "pointer";
+    }
+
+    function updateBreakdown() {
+      const ciValue = checkInEl.value;
+      const coValue = checkOutEl.value;
+
+      if (!ciValue || !coValue) {
+        breakdown.style.display = "none";
+        disableReserve();
+        return;
+      }
+
+      const ci = new Date(ciValue);
+      const co = new Date(coValue);
+
+      if (co <= ci) {
+        breakdown.style.display = "none";
+        disableReserve();
+        return;
+      }
+
+      const nights = Math.ceil((co - ci) / (1000 * 60 * 60 * 24));
+      const total = nights * pricePerNight;
+
+      priceCalcEl.textContent = `₹${pricePerNight.toLocaleString("en-IN")} × ${nights} night${nights > 1 ? "s" : ""}`;
+      totalAmtEl.textContent = `₹${total.toLocaleString("en-IN")}`;
+      grandTotalEl.textContent = `₹${total.toLocaleString("en-IN")}`;
+      breakdown.style.display = "block";
+
+      const checkoutUrl = `/bookings/checkout?listingId=${encodeURIComponent(listingId)}&checkIn=${encodeURIComponent(ciValue)}&checkOut=${encodeURIComponent(coValue)}`;
+      enableReserve(checkoutUrl);
+    }
+
+    reserveBtn.addEventListener("click", (e) => {
+      if (reserveBtn.getAttribute("href") === "#") {
+        e.preventDefault();
+      }
+    });
+
+    checkInEl.addEventListener("change", () => {
+      checkOutEl.min = checkInEl.value;
+      updateBreakdown();
+    });
+
+    checkOutEl.addEventListener("change", updateBreakdown);
+
+    updateBreakdown();
+    disableReserve();
+  });
 </script>
 <div class="row mt-3">
   <div class="col-10 col-md-10 col-lg-10 offset-1 offset-md-2 offset-lg-2">
@@ -45,6 +126,55 @@
       </button>
     </form>
   </div>
+  <% } %>
+
+  <% if(currUser && !listing.owner._id.equals(currUser._id)) { %>
+    <div class="col-10 col-md-6 col-lg-5 offset-1 offset-md-2 offset-lg-2 mb-4">
+      <div class="p-4 shadow-sm" style="border-radius:14px; border:1px solid #e0e0e0; background:#fafafa;">
+
+        <h5 class="mb-1 fw-bold">
+          &#8377;<%= listing.price.toLocaleString("en-IN") %>
+          <span style="font-size:.95rem; font-weight:400; color:#777;"> / night</span>
+        </h5>
+        <hr />
+
+        <div class="row g-2 mb-3">
+          <div class="col-12 col-md-6">
+            <label class="form-label fw-semibold" style="font-size:.82rem; letter-spacing:.05em;">CHECK-IN</label>
+            <input type="date" id="checkIn" class="form-control form-control-sm" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label fw-semibold" style="font-size:.82rem; letter-spacing:.05em;">CHECK-OUT</label>
+            <input type="date" id="checkOut" class="form-control form-control-sm" />
+          </div>
+        </div>
+
+        <div id="priceBreakdown" style="display:none;" class="mb-3 p-3 bg-white rounded border">
+          <div class="d-flex justify-content-between mb-1" style="font-size:.9rem;">
+            <span id="priceCalc" class="text-muted"></span>
+            <span id="totalAmt"></span>
+          </div>
+          <hr class="my-2" />
+          <div class="d-flex justify-content-between fw-bold">
+            <span>Total</span>
+            <span id="grandTotal"></span>
+          </div>
+        </div>
+
+        <a
+          id="reserveBtn"
+          href="#"
+          class="btn btn-dark w-100 py-2"
+          style="cursor:not-allowed; opacity:.55;"
+        >
+          Reserve
+        </a>
+
+        <p class="text-center text-muted mt-2 mb-0" style="font-size:.78rem;">
+          <i class="fa-solid fa-lock me-1"></i>Secure checkout
+        </p>
+      </div>
+    </div>
   <% } %>
 
   <div class="col-10 col-md-8 col-lg-8 offset-1 offset-md-2 offset-lg-2 mb-3">
@@ -149,10 +279,10 @@
     </div>
     <% } %>
   </div>
-  <div class="col-12 col-md-10 col-lg-10 offset-0 offset-md-2 offset-lg-2 mb-3">
+  <!-- <div class="col-12 col-md-10 col-lg-10 offset-0 offset-md-2 offset-lg-2 mb-3">
     <h3>Where you'll be</h3>
     <div class="col-12 col-md-10 col-lg-10 offest-0 mb-3" id="map"></div>
-  </div>
+  </div> -->
 </div>
 
 <script src="/js/map.js"></script>
